@@ -70,11 +70,27 @@
 
 ### コーディング規約
 
+#### 全般
 - RuboCopに従う（`bundle exec rubocop`）
+- マジックナンバー・マジックストリングは使わない。定数またはenumで定義する
+- メソッドは1つの責務に絞る（単一責任原則）
+- ネストは最大3段階まで。深くなる場合はメソッド抽出やearly returnで整理する
+- コメントは「なぜ（Why）」を書く。「何を（What）」はコード自体で表現する
+
+#### Rails
 - サービスオブジェクトパターンを使用（`app/services/`）
 - ビジネスロジックはモデルまたはサービスに置く（コントローラを薄く保つ）
-- N+1クエリに注意（Bulletgemで検出）
-- マジックナンバーは定数化する
+- コントローラのアクションは7つの標準アクション（index/show/new/create/edit/update/destroy）に限定する。収まらない場合は別コントローラに分割する
+- N+1クエリに注意する。関連データは `includes` / `preload` で事前読み込みする
+- スコープはモデルに定義する。コントローラで直接 `where` チェーンを書かない
+- `ENV.fetch("KEY_NAME")` を使う（`ENV["KEY_NAME"]` は使わない）
+
+#### 命名規則
+- モデル: 単数形・PascalCase（`Property`, `LandRegistration`）
+- テーブル: 複数形・snake_case（`properties`, `land_registrations`）
+- サービス: 動詞+名詞・PascalCase（`RegistrationPdfParser`, `StationFinder`）
+- メソッド: 動詞始まり・snake_case（`fetch_zone_info`, `parse_registration`）
+- boolean: `is_`を付けない。疑問形（`vacant?`, `completed?`）
 
 ### ブランチ戦略
 
@@ -92,6 +108,20 @@ app/jobs/       バックグラウンドジョブ（Solid Queue）
 spec/           RSpecテスト
 e2e/            Playwrightテスト
 ```
+
+## 開発進捗
+
+| フェーズ | 内容 | 状態 |
+|---------|------|------|
+| 0 | プロジェクト初期セットアップ | 完了 |
+| 1 | 物件CRUD・認証・ダッシュボード (F01, F09) | 未着手 |
+| 2 | 登記簿PDFパーサー (F02) | 未着手 |
+| 3 | 地番→位置変換・地域情報取得 (F03, F04) | 未着手 |
+| 4 | レントロール手動入力 (F05) | 未着手 |
+| 5 | 添付資料・修繕履歴 (F06, F07) | 未着手 |
+| 6 | 概要書プレビュー・PDF出力 (F08) | 未着手 |
+
+詳細は `docs/plans/開発計画.md` を参照。
 
 ## 外部サービス（.envに設定）
 
