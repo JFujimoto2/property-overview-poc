@@ -7,13 +7,14 @@
 
 ## 技術スタック
 
-- Ruby on Rails 7.2+ / Ruby 3.3+
+- Ruby on Rails 8.1 / Ruby 4.0
 - PostgreSQL 16 + PostGIS
 - Hotwire (Turbo + Stimulus)
 - Tailwind CSS
 - RSpec (バックエンドテスト)
 - Playwright (E2E/フロントエンドテスト)
-- Sidekiq + Redis (バックグラウンドジョブ)
+- Solid Queue (バックグラウンドジョブ、Rails 8標準)
+- Solid Cable (ActionCable、Rails 8標準)
 
 ## 開発ルール
 
@@ -87,7 +88,7 @@
 ```
 docs/           設計ドキュメント
 app/services/   ビジネスロジック（PDF解析、API連携等）
-app/jobs/       Sidekiqジョブ
+app/jobs/       バックグラウンドジョブ（Solid Queue）
 spec/           RSpecテスト
 e2e/            Playwrightテスト
 ```
@@ -97,7 +98,6 @@ e2e/            Playwrightテスト
 ```
 # .env.example
 DATABASE_URL=
-REDIS_URL=
 HEARTRAILS_API_URL=https://express.heartrails.com/api/json
 GSI_GEOCODING_URL=https://msearch.gsi.go.jp/address-search/AddressSearch
 ```
