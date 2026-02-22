@@ -106,7 +106,18 @@ jobs:
           DATABASE_URL: postgis://postgres:postgres@localhost:5432/property_overview_poc_test
         run: bin/rails db:create db:schema:load
 
+      - name: Check for E2E test files
+        id: check_tests
+        run: |
+          if ls e2e/**/*.spec.ts 1>/dev/null 2>&1; then
+            echo "has_tests=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_tests=false" >> "$GITHUB_OUTPUT"
+            echo "No E2E test files found — skipping Playwright run"
+          fi
+
       - name: Run Playwright tests
+        if: steps.check_tests.outputs.has_tests == 'true'
         env:
           RAILS_ENV: test
           DATABASE_URL: postgis://postgres:postgres@localhost:5432/property_overview_poc_test
